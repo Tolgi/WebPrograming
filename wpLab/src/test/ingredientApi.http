@@ -1,0 +1,78 @@
+POST http://localhost:8080/api/ingredients
+Content-Type: application/x-www-form-urlencoded
+
+name=lettuce&spicy=false&amount=6&veggie=false&pizzaList=Calzone,Quattro Formaggi,Burger Classic
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 201, "Response status is not 201");
+  client.assert(response.headers.valueOf("Location")!= null, "Invalid Location");
+  client.assert(response.body.hasOwnProperty("slotId"), 'Can not find the slotId');
+  client.global.set("newSlotUrl", response.headers.valueOf("Location"));
+  client.global.set("slotId", response.body["slotId"]);
+});
+%}
+
+
+###
+GET http://localhost:8080/api/ingredients
+page: 2
+page-size:2
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 400, "Response status is not 400");
+});
+%}
+
+###
+PATCH http://localhost:8080/api/ingredients/ham
+Content-Type: application/x-www-form-urlencoded
+
+spicy=true&amount=19&veggie=false&pizzaList=Burger Classic
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 201");
+  client.assert(response.body.hasOwnProperty("slotId"), 'Can not find the slotId');
+});
+%}
+
+
+###
+DELETE http://localhost:8080/api/ingredients/peperoni
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+###
+GET http://localhost:8080/api/ingredients/ham
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+###
+GET http://localhost:8080/api/ingredients/peperoni/pizzas
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+###
+GET http://localhost:8080/api/ingredients/attribute?spicy=false
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
+
+###

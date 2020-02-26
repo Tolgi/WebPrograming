@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <title>Pizza Order page - Welcome and choose pizza</title>
+    <style type="text/css">
+        body {
+            width: 800px;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Welcome to our Pizza Delivery App</h1>
+</header>
+<main>
+    <h2>Choose pizza:</h2>
+
+    <form th:action="@{/home}" th:method="post">
+        <th:block th:each="pizza : ${listPizzas}">
+
+            <input type="radio" id="pizzaName" name="pizzaName" th:value="${pizza.name}" th:text="${pizza.name}"></input>
+            <div th:text="${pizza.description}"></div>
+
+        </th:block>
+
+        <br>
+        <input type="submit" value="Submit" onclick="validationFunc()">
+        <p th:text="${errorM}"></p>
+    </form>
+
+    <form method="post" th:action="@{/home}">
+        <input type="text" name="newPizzaName">
+        <input type="text" name="newDesc">
+        <input type="submit" value="submit">
+    </form>
+
+
+
+</main>
+</body>
+</html>
